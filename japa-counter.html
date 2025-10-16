@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f57c00">
+    <title>Japa Counter - Mahaganapati & Bala Tripurasundari</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding-bottom: 70px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f57c00 0%, #ff9800 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #ffd54f;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            color: #f57c00;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background-color: rgba(245, 124, 0, 0.1);
+            border-bottom: 3px solid #f57c00;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .japam-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .japam-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .japam-dates {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .count-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .count-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .count-label {
+            color: #666;
+            font-size: 15px;
+        }
+
+        .count-value {
+            color: #f57c00;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: 2px solid #f57c00;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #f57c00;
+        }
+
+        .btn-outline:hover {
+            background: #fff3e0;
+        }
+
+        .btn-primary {
+            background: #f57c00;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e65100;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 5px 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-item.active {
+            color: #f57c00;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #5e35b1;
+        }
+
+        .counter-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .counter-number {
+            font-size: 72px;
+            font-weight: 700;
+            color: #f57c00;
+            line-height: 1;
+        }
+
+        .counter-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .increment-btn {
+            width: 100%;
+            padding: 20px;
+            background: #f57c00;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+
+        .increment-btn:hover {
+            background: #e65100;
+        }
+
+        .increment-btn:active {
+            transform: scale(0.98);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .activity-date {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .activity-day {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .activity-mantra {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f57c00;
+            margin-bottom: 10px;
+        }
+
+        .activity-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .activity-stat {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 8px;
+        }
+
+        .activity-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f57c00;
+        }
+
+        .activity-stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .activity-entry {
+            margin-bottom: 15px;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #f57c00;
+            border-radius: 8px;
+            background: white;
+            color: #f57c00;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: #f57c00;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .delete-btn:hover {
+            background: #d32f2f;
+        }
+
+        /* Mantra-specific colors */
+        .mantra-ganapati {
+            --mantra-color: #f57c00;
+            --mantra-color-light: #fff3e0;
+            --mantra-color-hover: #e65100;
+        }
+
+        .mantra-tripurasundari {
+            --mantra-color: #d32f2f;
+            --mantra-color-light: #ffebee;
+            --mantra-color-hover: #b71c1c;
+        }
+
+        .mantra-ganapati .count-value,
+        .mantra-ganapati .counter-number,
+        .mantra-ganapati .activity-stat-value,
+        .mantra-ganapati .activity-mantra {
+            color: #f57c00;
+        }
+
+        .mantra-tripurasundari .count-value,
+        .mantra-tripurasundari .counter-number,
+        .mantra-tripurasundari .activity-stat-value,
+        .mantra-tripurasundari .activity-mantra {
+            color: #d32f2f;
+        }
+
+        .mantra-ganapati .btn {
+            border-color: #f57c00;
+        }
+
+        .mantra-tripurasundari .btn {
+            border-color: #d32f2f;
+        }
+
+        .mantra-ganapati .btn-outline {
+            color: #f57c00;
+        }
+
+        .mantra-tripurasundari .btn-outline {
+            color: #d32f2f;
+        }
+
+        .mantra-ganapati .btn-outline:hover {
+            background: #fff3e0;
+        }
+
+        .mantra-tripurasundari .btn-outline:hover {
+            background: #ffebee;
+        }
+
+        .mantra-ganapati .btn-primary {
+            background: #f57c00;
+        }
+
+        .mantra-tripurasundari .btn-primary {
+            background: #d32f2f;
+        }
+
+        .mantra-ganapati .btn-primary:hover {
+            background: #e65100;
+        }
+
+        .mantra-tripurasundari .btn-primary:hover {
+            background: #b71c1c;
+        }
+
+        .mantra-ganapati .counter-display {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        }
+
+        .mantra-tripurasundari .counter-display {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+        }
+
+        .mantra-ganapati .increment-btn {
+            background: #f57c00;
+        }
+
+        .mantra-tripurasundari .increment-btn {
+            background: #d32f2f;
+        }
+
+        .mantra-ganapati .increment-btn:hover {
+            background: #e65100;
+        }
+
+        .mantra-tripurasundari .increment-btn:hover {
+            background: #b71c1c;
+        }
+
+        .mantra-ganapati .activity-stat {
+            background: #fff3e0;
+        }
+
+        .mantra-tripurasundari .activity-stat {
+            background: #ffebee;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="goBack()" style="display: none;">←</button>
+        <div class="header-title" id="headerTitle">Japa Counter</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" id="mainTabs">
+        <button class="tab active" onclick="switchTab('upcoming')">UPCOMING</button>
+        <button class="tab" onclick="switchTab('past')">PAST</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content" id="mainContent">
+        <!-- Upcoming Japams -->
+        <div id="upcomingContent">
+            <div class="japam-card mantra-ganapati">
+                <div class="japam-title">Mahaganapati Japa</div>
+                <div class="japam-dates" id="ganapatiDates">To be decided | 8 Nov 2024 - 8 Nov 2025</div>
+                <div class="count-row">
+                    <span class="count-label">Japam Sankhya</span>
+                    <span class="count-value" id="ganapatiCount">0</span>
+                </div>
+                <div class="count-row">
+                    <span class="count-label">Tarpana Sankhya</span>
+                    <span class="count-value" id="ganapatiTarpana">0</span>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-outline" onclick="openAddCountModal('ganapati')">Add Count</button>
+                    <button class="btn btn-outline" onclick="quickReset('ganapati')" style="padding: 12px 16px;">🔄 Reset</button>
+                    <button class="btn btn-primary" onclick="viewJapam('ganapati')">View ›</button>
+                </div>
+            </div>
+
+            <div class="japam-card mantra-tripurasundari">
+                <div class="japam-title">Bala Tripurasundari Japa</div>
+                <div class="japam-dates" id="tripurasundariDates">To be decided | 8 Nov 2024 - 8 Nov 2025</div>
+                <div class="count-row">
+                    <span class="count-label">Japam Sankhya</span>
+                    <span class="count-value" id="tripurasundariCount">0</span>
+                </div>
+                <div class="count-row">
+                    <span class="count-label">Tarpana Sankhya</span>
+                    <span class="count-value" id="tripurasundariTarpana">0</span>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-outline" onclick="openAddCountModal('tripurasundari')">Add Count</button>
+                    <button class="btn btn-outline" onclick="quickReset('tripurasundari')" style="padding: 12px 16px;">🔄 Reset</button>
+                    <button class="btn btn-primary" onclick="viewJapam('tripurasundari')">View ›</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Past Japams -->
+        <div id="pastContent" style="display: none;">
+            <div id="activityHistory"></div>
+        </div>
+    </div>
+
+    <!-- Detail View (Hidden by default) -->
+    <div id="detailView" style="display: none;">
+        <div class="content">
+            <div class="japam-card" id="detailCard">
+                <div class="japam-title" id="detailTitle">Mahaganapati Japa</div>
+                <div class="japam-dates" id="detailDates">To be decided | 8 Nov 2024 - 8 Nov 2025</div>
+                
+                <div class="counter-display">
+                    <div class="counter-number" id="detailCounter">0</div>
+                    <div class="counter-label">Current Count</div>
+                </div>
+
+                <button class="increment-btn" onclick="incrementFromDetail()">
+                    + Add Count
+                </button>
+
+                <div style="margin-top: 20px;">
+                    <div class="count-row">
+                        <span class="count-label">Total Japam Sankhya</span>
+                        <span class="count-value" id="detailTotalCount">0</span>
+                    </div>
+                    <div class="count-row">
+                        <span class="count-label">Tarpana Sankhya</span>
+                        <span class="count-value" id="detailTarpana">0</span>
+                    </div>
+                </div>
+
+                <div class="button-group" style="margin-top: 20px;">
+                    <button class="btn btn-outline" onclick="openTarpanaModal()">Add Tarpana</button>
+                    <button class="btn btn-primary" onclick="openResetMenu()">🔄 Reset Options</button>
+                </div>
+                
+                <div id="resetMenu" style="display: none; margin-top: 15px; padding: 20px; background: #fff3e0; border-radius: 12px; border: 2px solid #f57c00;">
+                    <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 15px; text-align: center;">⚠️ Choose Reset Option</div>
+                    <button class="btn btn-outline" style="width: 100%; margin-bottom: 10px; font-size: 15px; padding: 15px;" onclick="resetJapaSankhya()">Reset Japa Sankhya Only</button>
+                    <button class="btn btn-outline" style="width: 100%; margin-bottom: 10px; font-size: 15px; padding: 15px;" onclick="resetTarpanaSankhya()">Reset Tarpana Sankhya Only</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px; font-size: 15px; padding: 15px;" onclick="resetCurrentJapam()">Reset Both to 0</button>
+                    <button class="btn btn-outline" style="width: 100%; font-size: 14px; padding: 12px;" onclick="openResetMenu()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Count Modal -->
+    <div class="modal" id="addCountModal">
+        <div class="modal-content">
+            <div class="modal-title">Add Japa Count</div>
+            <div class="input-group">
+                <label class="input-label">Number of Japas</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="btn btn-outline" style="padding: 12px 20px; font-size: 20px;" onclick="decrementCountInput()">−</button>
+                    <input type="number" class="input-field" id="countInput" placeholder="Enter count" min="1" style="text-align: center;">
+                    <button class="btn btn-outline" style="padding: 12px 20px; font-size: 20px;" onclick="incrementCountInput()">+</button>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="addCount()">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Tarpana Modal -->
+    <div class="modal" id="tarpanaModal">
+        <div class="modal-content">
+            <div class="modal-title">Add Tarpana Count</div>
+            <div class="input-group">
+                <label class="input-label">Number of Tarpanas</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="btn btn-outline" style="padding: 12px 20px; font-size: 20px;" onclick="decrementTarpanaInput()">−</button>
+                    <input type="number" class="input-field" id="tarpanaInput" placeholder="Enter count" min="1" style="text-align: center;">
+                    <button class="btn btn-outline" style="padding: 12px 20px; font-size: 20px;" onclick="incrementTarpanaInput()">+</button>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-outline" onclick="closeTarpanaModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="addTarpana()">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showHome()">
+            <div class="nav-icon">🏠</div>
+            <div>HOME</div>
+        </div>
+        <div class="nav-item" onclick="showNews()">
+            <div class="nav-icon">📰</div>
+            <div>NEWS</div>
+        </div>
+        <div class="nav-item" onclick="showProfile()">
+            <div class="nav-icon">👤</div>
+            <div>PROFILE</div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure to store japa counts
+        let japaData = {
+            ganapati: {
+                count: 0,
+                tarpana: 0,
+                startDate: '8 Nov 2024',
+                endDate: '8 Nov 2025',
+                history: []  // Array to store daily activities
+            },
+            tripurasundari: {
+                count: 0,
+                tarpana: 0,
+                startDate: '8 Nov 2024',
+                endDate: '8 Nov 2025',
+                history: []  // Array to store daily activities
+            }
+        };
+
+        let currentJapam = null;
+        let currentView = 'main';
+        let activityFilter = 'all';  // 'all', 'ganapati', 'tripurasundari'
+
+        // Load data from localStorage on page load
+        window.onload = function() {
+            loadData();
+            updateDisplay();
+        };
+
+        function loadData() {
+            const saved = localStorage.getItem('japaData');
+            if (saved) {
+                japaData = JSON.parse(saved);
+                // Ensure history array exists for older data
+                if (!japaData.ganapati.history) japaData.ganapati.history = [];
+                if (!japaData.tripurasundari.history) japaData.tripurasundari.history = [];
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('japaData', JSON.stringify(japaData));
+        }
+
+        function addToHistory(japamType, japaCount, tarpanaCount) {
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+            const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+            
+            japaData[japamType].history.push({
+                date: dateStr,
+                time: timeStr,
+                timestamp: now.getTime(),
+                japaCount: japaCount,
+                tarpanaCount: tarpanaCount
+            });
+            
+            saveData();
+        }
+
+        function updateDisplay() {
+            // Update Mahaganapati counts
+            document.getElementById('ganapatiCount').textContent = japaData.ganapati.count;
+            document.getElementById('ganapatiTarpana').textContent = japaData.ganapati.tarpana;
+
+            // Update Bala Tripurasundari counts
+            document.getElementById('tripurasundariCount').textContent = japaData.tripurasundari.count;
+            document.getElementById('tripurasundariTarpana').textContent = japaData.tripurasundari.tarpana;
+        }
+
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (tab === 'upcoming') {
+                document.getElementById('upcomingContent').style.display = 'block';
+                document.getElementById('pastContent').style.display = 'none';
+            } else {
+                document.getElementById('upcomingContent').style.display = 'none';
+                document.getElementById('pastContent').style.display = 'block';
+                renderActivityHistory();  // Render history when switching to past tab
+            }
+        }
+
+        function openAddCountModal(japamType) {
+            currentJapam = japamType;
+            document.getElementById('addCountModal').classList.add('active');
+            document.getElementById('countInput').value = '1';
+            document.getElementById('countInput').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('addCountModal').classList.remove('active');
+        }
+
+        function incrementCountInput() {
+            const input = document.getElementById('countInput');
+            const currentValue = parseInt(input.value) || 0;
+            input.value = currentValue + 1;
+        }
+
+        function decrementCountInput() {
+            const input = document.getElementById('countInput');
+            const currentValue = parseInt(input.value) || 1;
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+            }
+        }
+
+        function addCount() {
+            const count = parseInt(document.getElementById('countInput').value);
+            if (count && count > 0) {
+                japaData[currentJapam].count += count;
+                addToHistory(currentJapam, count, 0);  // Record in history
+                saveData();
+                updateDisplay();
+                
+                if (currentView === 'detail') {
+                    updateDetailView();
+                }
+                
+                closeModal();
+            } else {
+                alert('Please enter a valid count');
+            }
+        }
+
+        function viewJapam(japamType) {
+            currentJapam = japamType;
+            currentView = 'detail';
+            
+            // Hide main content and tabs
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('mainTabs').style.display = 'none';
+            
+            // Show detail view
+            document.getElementById('detailView').style.display = 'block';
+            
+            // Update header
+            document.querySelector('.back-btn').style.display = 'block';
+            
+            const title = japamType === 'ganapati' ? 'Mahaganapati Japa' : 'Bala Tripurasundari Japa';
+            document.getElementById('headerTitle').textContent = title;
+            document.getElementById('detailTitle').textContent = title;
+            
+            // Apply color class to detail card
+            const detailCard = document.getElementById('detailCard');
+            detailCard.className = 'japam-card mantra-' + japamType;
+            
+            updateDetailView();
+        }
+
+        function updateDetailView() {
+            const data = japaData[currentJapam];
+            document.getElementById('detailCounter').textContent = data.count;
+            document.getElementById('detailTotalCount').textContent = data.count;
+            document.getElementById('detailTarpana').textContent = data.tarpana;
+            document.getElementById('detailDates').textContent = `To be decided | ${data.startDate} - ${data.endDate}`;
+        }
+
+        function goBack() {
+            currentView = 'main';
+            
+            // Show main content and tabs
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('mainTabs').style.display = 'flex';
+            
+            // Hide detail view
+            document.getElementById('detailView').style.display = 'none';
+            
+            // Update header
+            document.querySelector('.back-btn').style.display = 'none';
+            document.getElementById('headerTitle').textContent = 'Japa Counter';
+        }
+
+        function incrementFromDetail() {
+            japaData[currentJapam].count += 1;
+            addToHistory(currentJapam, 1, 0);  // Record in history
+            saveData();
+            updateDisplay();
+            updateDetailView();
+        }
+
+        function openTarpanaModal() {
+            document.getElementById('tarpanaModal').classList.add('active');
+            document.getElementById('tarpanaInput').value = '1';
+            document.getElementById('tarpanaInput').focus();
+        }
+
+        function closeTarpanaModal() {
+            document.getElementById('tarpanaModal').classList.remove('active');
+        }
+
+        function incrementTarpanaInput() {
+            const input = document.getElementById('tarpanaInput');
+            const currentValue = parseInt(input.value) || 0;
+            input.value = currentValue + 1;
+        }
+
+        function decrementTarpanaInput() {
+            const input = document.getElementById('tarpanaInput');
+            const currentValue = parseInt(input.value) || 1;
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+            }
+        }
+
+        function addTarpana() {
+            const count = parseInt(document.getElementById('tarpanaInput').value);
+            if (count && count > 0) {
+                japaData[currentJapam].tarpana += count;
+                addToHistory(currentJapam, 0, count);  // Record in history
+                saveData();
+                updateDisplay();
+                
+                if (currentView === 'detail') {
+                    updateDetailView();
+                }
+                
+                closeTarpanaModal();
+            } else {
+                alert('Please enter a valid count');
+            }
+        }
+
+        function openResetMenu() {
+            const menu = document.getElementById('resetMenu');
+            if (menu) {
+                if (menu.style.display === 'none' || menu.style.display === '') {
+                    menu.style.display = 'block';
+                } else {
+                    menu.style.display = 'none';
+                }
+            }
+        }
+
+        function quickReset(japamType) {
+            currentJapam = japamType;
+            const mantraName = japamType === 'ganapati' ? 'Mahaganapati' : 'Bala Tripurasundari';
+            const currentCount = japaData[japamType].count;
+            
+            const choice = confirm(`Reset ${mantraName} Japa?\n\nClick OK to reset only Japa count\nClick Cancel to see more options`);
+            
+            if (choice) {
+                // Reset only japa count
+                if (confirm(`Are you sure you want to reset ${mantraName} Japa count from ${currentCount} to 0?`)) {
+                    japaData[japamType].count = 0;
+                    saveData();
+                    updateDisplay();
+                    alert(`✅ ${mantraName} Japa count reset from ${currentCount} to 0!`);
+                    // Reload page to ensure display updates
+                    setTimeout(() => location.reload(), 500);
+                }
+            } else {
+                // Open detail view with reset menu
+                viewJapam(japamType);
+                // Automatically open the reset menu
+                setTimeout(() => {
+                    openResetMenu();
+                }, 300);
+            }
+        }
+
+        function resetJapaSankhya() {
+            if (!currentJapam) {
+                alert('Please select a japa first');
+                return;
+            }
+            
+            const currentCount = japaData[currentJapam].count;
+            const mantraName = currentJapam === 'ganapati' ? 'Mahaganapati' : 'Bala Tripurasundari';
+            
+            if (confirm('Are you sure you want to reset only the Japa Sankhya count to 0?\n\nThis will NOT affect your Tarpana count.')) {
+                japaData[currentJapam].count = 0;
+                saveData();
+                updateDisplay();
+                if (currentView === 'detail') {
+                    updateDetailView();
+                }
+                const menu = document.getElementById('resetMenu');
+                if (menu) menu.style.display = 'none';
+                alert(`✅ ${mantraName} Japa Sankhya reset from ${currentCount} to 0!`);
+                // Reload page to ensure display updates
+                setTimeout(() => location.reload(), 500);
+            }
+        }
+
+        function resetTarpanaSankhya() {
+            if (!currentJapam) {
+                alert('Please select a japa first');
+                return;
+            }
+            
+            const currentCount = japaData[currentJapam].tarpana;
+            const mantraName = currentJapam === 'ganapati' ? 'Mahaganapati' : 'Bala Tripurasundari';
+            
+            if (confirm('Are you sure you want to reset only the Tarpana Sankhya count to 0?\n\nThis will NOT affect your Japa count.')) {
+                japaData[currentJapam].tarpana = 0;
+                saveData();
+                updateDisplay();
+                if (currentView === 'detail') {
+                    updateDetailView();
+                }
+                const menu = document.getElementById('resetMenu');
+                if (menu) menu.style.display = 'none';
+                alert(`✅ ${mantraName} Tarpana Sankhya reset from ${currentCount} to 0!`);
+                // Reload page to ensure display updates
+                setTimeout(() => location.reload(), 500);
+            }
+        }
+
+        function resetCurrentJapam() {
+            if (!currentJapam) {
+                alert('Please select a japa first');
+                return;
+            }
+            
+            const currentJapaCount = japaData[currentJapam].count;
+            const currentTarpanaCount = japaData[currentJapam].tarpana;
+            const mantraName = currentJapam === 'ganapati' ? 'Mahaganapati' : 'Bala Tripurasundari';
+            
+            if (confirm('Are you sure you want to reset BOTH Japa and Tarpana counts to 0?\n\nThis will reset everything!')) {
+                japaData[currentJapam].count = 0;
+                japaData[currentJapam].tarpana = 0;
+                saveData();
+                updateDisplay();
+                if (currentView === 'detail') {
+                    updateDetailView();
+                }
+                const menu = document.getElementById('resetMenu');
+                if (menu) menu.style.display = 'none';
+                alert(`✅ ${mantraName} counts reset!\nJapa: ${currentJapaCount} → 0\nTarpana: ${currentTarpanaCount} → 0`);
+                // Reload page to ensure display updates
+                setTimeout(() => location.reload(), 500);
+            }
+        }
+
+        function renderActivityHistory() {
+            const historyContainer = document.getElementById('activityHistory');
+            
+            // Combine both histories with mantra info
+            let allActivities = [];
+            
+            if (activityFilter === 'all' || activityFilter === 'ganapati') {
+                japaData.ganapati.history.forEach(activity => {
+                    allActivities.push({
+                        ...activity,
+                        mantra: 'Mahaganapati',
+                        type: 'ganapati'
+                    });
+                });
+            }
+            
+            if (activityFilter === 'all' || activityFilter === 'tripurasundari') {
+                japaData.tripurasundari.history.forEach(activity => {
+                    allActivities.push({
+                        ...activity,
+                        mantra: 'Bala Tripurasundari',
+                        type: 'tripurasundari'
+                    });
+                });
+            }
+            
+            // Sort by timestamp (newest first)
+            allActivities.sort((a, b) => b.timestamp - a.timestamp);
+            
+            if (allActivities.length === 0) {
+                historyContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <p>No activity recorded yet</p>
+                        <p style="font-size: 14px; color: #999; margin-top: 10px;">
+                            Start adding japa counts to see your activity history here
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Group activities by date
+            const groupedByDate = {};
+            allActivities.forEach(activity => {
+                if (!groupedByDate[activity.date]) {
+                    groupedByDate[activity.date] = [];
+                }
+                groupedByDate[activity.date].push(activity);
+            });
+            
+            // Build HTML
+            let html = `
+                <div class="filter-section">
+                    <div class="filter-buttons">
+                        <button class="filter-btn ${activityFilter === 'all' ? 'active' : ''}" 
+                                onclick="setActivityFilter('all')">All</button>
+                        <button class="filter-btn ${activityFilter === 'ganapati' ? 'active' : ''}" 
+                                onclick="setActivityFilter('ganapati')">Mahaganapati</button>
+                        <button class="filter-btn ${activityFilter === 'tripurasundari' ? 'active' : ''}" 
+                                onclick="setActivityFilter('tripurasundari')">Bala Tripurasundari</button>
+                    </div>
+                </div>
+            `;
+            
+            // Render each date group
+            Object.keys(groupedByDate).sort().reverse().forEach(date => {
+                const activities = groupedByDate[date];
+                const dateObj = new Date(date);
+                const formattedDate = dateObj.toLocaleDateString('en-IN', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
+                const dayName = dateObj.toLocaleDateString('en-IN', { weekday: 'long' });
+                
+                // Calculate totals for the day
+                let dayTotalJapa = 0;
+                let dayTotalTarpana = 0;
+                
+                activities.forEach(activity => {
+                    dayTotalJapa += activity.japaCount;
+                    dayTotalTarpana += activity.tarpanaCount;
+                });
+                
+                html += `
+                    <div class="activity-card">
+                        <div class="activity-header">
+                            <div>
+                                <div class="activity-date">${formattedDate}</div>
+                                <div class="activity-day">${dayName}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 12px; color: #999;">Day Total</div>
+                                <div style="font-size: 16px; font-weight: 600; color: #5e35b1;">
+                                    ${dayTotalJapa} japa${dayTotalTarpana > 0 ? ' • ' + dayTotalTarpana + ' tarpana' : ''}
+                                </div>
+                            </div>
+                        </div>
+                `;
+                
+                // Render each activity for this date
+                activities.forEach((activity, index) => {
+                    const colorClass = `mantra-${activity.type}`;
+                    html += `
+                        <div class="activity-entry ${colorClass}">
+                            <div class="activity-mantra">
+                                ${activity.mantra} - ${activity.time}
+                            </div>
+                            <div class="activity-stats">
+                                ${activity.japaCount > 0 ? `
+                                    <div class="activity-stat">
+                                        <div class="activity-stat-value">${activity.japaCount}</div>
+                                        <div class="activity-stat-label">Japa</div>
+                                    </div>
+                                ` : ''}
+                                ${activity.tarpanaCount > 0 ? `
+                                    <div class="activity-stat">
+                                        <div class="activity-stat-value">${activity.tarpanaCount}</div>
+                                        <div class="activity-stat-label">Tarpana</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <button class="delete-btn" onclick="deleteActivity('${activity.type}', ${activity.timestamp})">
+                                🗑️ Delete Entry
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            });
+            
+            historyContainer.innerHTML = html;
+        }
+
+        function setActivityFilter(filter) {
+            activityFilter = filter;
+            renderActivityHistory();
+        }
+
+        function deleteActivity(japamType, timestamp) {
+            if (confirm('Are you sure you want to delete this activity entry?')) {
+                const history = japaData[japamType].history;
+                const index = history.findIndex(h => h.timestamp === timestamp);
+                
+                if (index !== -1) {
+                    // Subtract the counts from totals
+                    const activity = history[index];
+                    japaData[japamType].count -= activity.japaCount;
+                    japaData[japamType].tarpana -= activity.tarpanaCount;
+                    
+                    // Ensure counts don't go negative
+                    if (japaData[japamType].count < 0) japaData[japamType].count = 0;
+                    if (japaData[japamType].tarpana < 0) japaData[japamType].tarpana = 0;
+                    
+                    // Remove from history
+                    history.splice(index, 1);
+                    
+                    saveData();
+                    updateDisplay();
+                    renderActivityHistory();
+                }
+            }
+        }
+
+        // Bottom navigation
+        function showHome() {
+            updateNavActive(0);
+            if (currentView === 'detail') {
+                goBack();
+            }
+        }
+
+        function showNews() {
+            updateNavActive(1);
+            alert('News feature coming soon!');
+        }
+
+        function showProfile() {
+            updateNavActive(2);
+            alert('Profile feature coming soon!');
+        }
+
+        function updateNavActive(index) {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('addCountModal').classList.contains('active')) {
+                    closeModal();
+                } else if (document.getElementById('tarpanaModal').classList.contains('active')) {
+                    closeTarpanaModal();
+                } else if (currentView === 'detail') {
+                    goBack();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
